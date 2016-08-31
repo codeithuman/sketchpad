@@ -8,3 +8,15 @@ config :sketchpad, Sketchpad.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Configure your database
+{whoami, _} = System.cmd("whoami", [])
+whoami = String.replace(whoami, "\n", "")
+
+config :sketchpad, Sketchpad.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "sketchpad_test",
+  username: System.get_env("DATABASE_POSTGRESQL_USERNAME") || whoami,
+  password: System.get_env("DATABASE_POSTGRESQL_PASSWORD") || nil,
+  hostname: "localhost",
+  pool: Ecto.Adapters.SQL.Sandbox
